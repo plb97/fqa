@@ -1,5 +1,5 @@
 # fqa
-##Formes quasi affines
+## Formes quasi affines
 
 Les formes quasi affines sont des fonctions *f* définies par :
 
