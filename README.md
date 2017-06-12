@@ -15,4 +15,4 @@ calendriers. Dans son livre
 Jean Lefort en donne une illustration remarquable.
 Cette utilisation des droites discrètes a été proposée en 1992 par A. Troesch :
 
-// [Droites discretes et calendriers (Albert Troesch)](https://mathinfo.unistra.fr/fileadmin/upload/IREM/Publications/L_Ouvert/n071/o_71_27-42.pdf)
+[Droites discretes et calendriers (Albert Troesch)](https://mathinfo.unistra.fr/fileadmin/upload/IREM/Publications/L_Ouvert/n071/o_71_27-42.pdf)
