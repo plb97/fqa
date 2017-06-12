@@ -1,51 +1,54 @@
+// Copyright (c) 2017 plb97.
+// All rights reserved.
+// Use of this source code is governed by a CeCILL-B_V1
+// (BSD-style) license that can be found in the
+// LICENCE (French) or LICENSE (English) file.
 package fqa
 
 import (
 	"fmt"
 )
-
+// fqa(a,b,r)(x) = [(ax + r) /b]
 type Fqa_t struct {
 	a int
 	b int
 	r int
 }
-// New cree une forme quasi-affine de parametres a, b, c
-func New(a, b, r int) *Fqa_t {
+// 'Creer' renvoie une nouvelle forme quasi affine de parametres a, b, c
+func Creer(a, b, r int) *Fqa_t {
 	return &Fqa_t{a,b,r}
 }
-// Elmt retourne les parametres a, b, r
+// 'Elmt' retourne les parametres a, b, r
 func (f *Fqa_t) Elmt() (int, int, int) {
 	return f.a, f.b, f.r
 }
-// Value renvoie la valeur en 'n'
-func (f *Fqa_t)Value(n int) (int) { // v = [(a*n+r)/b]
+// 'Valeur' renvoie la valeur en 'n'
+func (f *Fqa_t)Valeur(n int) (int) { // v = [(a*n+r)/b]
 	q,_ := Divent(f.a*n+f.r,f.b)
 	return q
 }
-// Inverse renvoie la valeur en 'n'
+// 'Inverse' renvoie la valeur inverse en 'n'
 func (f *Fqa_t)Inverse(n int) (int) { // v = [(b*n+b-r-1)/a]
 	q,_ := Divent(f.b*n+f.b-f.r-1,f.a)
 	return q
 }
-// Div_fqa retourne l'equivalent du quotient q
+// 'Div_fqa' retourne l'equivalent du quotient q
 // et du reste r de la 'division' de 'n' par 'f'
 func (f *Fqa_t) Div_fqa(n int) (q int, r int) {
 	q = f.Inverse(n)		// equivalent [n/f]
-	r = n - f.Value(q)		// equivalent n - f*[n/f]
+	r = n - f.Valeur(q)		// equivalent n - f*[n/f]
 	return q,r
 }
-func (f *Fqa_t)Equal(t *Fqa_t) bool {
+// 'Egal' retourne 'true' les parametres des formes quasi affines 'f' et 't sont respectivement egaux et 'false sinon
+func (f *Fqa_t)Egal(t *Fqa_t) bool {
 	if nil == t {return nil == f}
-//	if nil == f {return nil == t}
 	return f.a == t.a && f.b == t.b && f.r == t.r
 }
 func (f Fqa_t)String() string {
 	return fmt.Sprintf("[a:%d b:%d r:%d]",f.a,f.b,f.r)
 }
 
-// [Droites discretes et calendriers (Albert Troesch)](https://mathinfo.unistra.fr/fileadmin/upload/IREM/Publications/L_Ouvert/n071/o_71_27-42.pdf)
-
-// minmax retourne le statut ok :
+// 'minmax' retourne le statut ok :
 // 'false' si le tableau t est vide 
 // 'true' sinon, accompagne
 // du min et du max du tableau
@@ -66,6 +69,8 @@ func minmax(t []int) (bool, int, int) {
 	return true, min, max
 }
 
+// [Droites discretes et calendriers (Albert Troesch)](https://mathinfo.unistra.fr/fileadmin/upload/IREM/Publications/L_Ouvert/n071/o_71_27-42.pdf)
+// mise en oeuvre de l'algorithme decrit dans le document cite plus haut
 func algo(min int,t []int) ([]int, int, bool) {
 	var c, l = make([]int,len(t)), make([]int,len(t))
 	j := 0
@@ -96,6 +101,7 @@ func algo(min int,t []int) ([]int, int, bool) {
 	return l, g, echange
 }
 
+// premiere etape de l'algorithme decrit dans le document cite plus haut
 func etape1(t []int) (bool, int, int, int) {
 	var (
 		ok bool
@@ -142,6 +148,7 @@ func etape1(t []int) (bool, int, int, int) {
 	return true, a, b, r // point 2
 }
 
+// deuxieme etape de l'algorithme decrit dans le document cite plus haut
 func etape2(a, b, r, p, g int, echange bool) (int, int, int) {
 
 	// Operation 3 (symetrie orthogonale : x' = y ; y' = x)
@@ -161,11 +168,17 @@ func etape2(a, b, r, p, g int, echange bool) (int, int, int) {
 	return a, b, r
 }
 
+// DEFINITION : si 'f'(x) = [(ax + r) / b] est une forme quasi affine
+// alors le code en 'x' = f(x + 1) - f(x)
+// 'Codes' renvoie un indicateur et un pointeur *Fqa_t
+// si l'indicateur = 'false' le pointeur est nul
+// si l'indicateur = 'true' le pointeur represente la forme quasi
+// affine obtenue a partir des codes
 func Codes(c []int, x0, y0 int) (bool, *Fqa_t) {
 	ok, a, b, r := etape1(c)
 	if !ok {
 		return false, nil
 	}
 	r += b*y0 - a*x0
-	return ok, New(a, b, r)
+	return ok, Creer(a, b, r)
 }

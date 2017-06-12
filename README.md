@@ -1,9 +1,9 @@
 # fqa
 ##Formes quasi affines
 
-Les formes quasi affines sont des fonctions définies par :
+Les formes quasi affines sont des fonctions *f* définies par :
 
-    y = [(ax + r) / b] 
+    f(x) = [(ax + r) / b] 
 
 où *a*, *b* et *r* sont des entiers avec *a* > *r* et *[]* désigne 
 la partie entière.

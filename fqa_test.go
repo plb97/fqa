@@ -1,3 +1,8 @@
+// Copyright (c) 2017 plb97.
+// All rights reserved.
+// Use of this source code is governed by a CeCILL-B_V1
+// (BSD-style) license that can be found in the
+// LICENCE (French) or LICENSE (English) file.
 package fqa
 
 import (
@@ -9,28 +14,30 @@ type test_Fqa_t struct {
 	f *Fqa_t
 }
 var tt = []test_Fqa_t{
-		{i:20,n:2451605,f:New(146097,4,6884480)},	// siecle calendier gregorien
-		{i:16,n:5844,f:New(1461,4,0)},				// annee calendier gregorien
-		{i:7,n:122,f:New(153,5,-457)},				// mois calendrier gregorien
-		{i:8,n:7,f:New(1,1,-1)},					// jour calendrier gregorien
+		{i:20,n:2451605,f:Creer(146097,4,6884480)},	// siecle calendier gregorien
+		{i:16,n:5844,f:Creer(1461,4,0)},				// annee calendier gregorien
+		{i:7,n:122,f:Creer(153,5,-457)},				// mois calendrier gregorien
+		{i:8,n:7,f:Creer(1,1,-1)},					// jour calendrier gregorien
 }
 
-func Test_fqa_value(t *testing.T) {
+func Test_fqa_valeur(t *testing.T) {
+	test := "valeur"
 	for _, v := range tt {
-		actual := v.f.Value(v.i)
-		expected := v.n
-		if actual != expected {
-			t.Errorf("value: expected %v, actual %v", expected, actual)
+		obtenu := v.f.Valeur(v.i)
+		attendu := v.n
+		if obtenu != attendu {
+			t.Errorf(test+" : attendu %v, obtenu %v", attendu, obtenu)
 		}
 	}	
 }
 
 func Test_fqa_inverse(t *testing.T) {
+	test := "inverse"
 	for _, v := range tt {
-		actual := v.f.Inverse(v.n)
-		expected := v.i
-		if actual != expected {
-			t.Errorf("inverse: expected %v, actual %v", expected, actual)
+		obtenu := v.f.Inverse(v.n)
+		attendu := v.i
+		if obtenu != attendu {
+			t.Errorf(test+" : attendu %v, obtenu %v", attendu, obtenu)
 		}
 	}	
 }
@@ -46,30 +53,31 @@ type test_t struct {
 }
 
 func Test_codes(t *testing.T) {
+	test := "codes"
 	var tests_codes = []struct {
 		data data_t
-		expected test_t
+		attendu test_t
 	}{
 		{ // exemple
 			data_t{[]int{2,2,1,2,2,2,1,2,2,1,2,2,2,1,2,2,1,2,2,2,1},0,0},
-			test_t{ok:true,f:New(12,7,5)},
+			test_t{ok:true,f:Creer(12,7,5)},
 		},
 		{ // calendrier musulman (cycle des annees)
 			data_t{[]int{3,2,3,3,3,2,3,3,2,3,3,3,2,3,3,3,2,3,3,2,3,3},0,2},
-			test_t{ok:true,f:New(30,11,26)},
+			test_t{ok:true,f:Creer(30,11,26)},
 		},
 		{ // calendrier juif (annees embolismiques)
 			data_t{[]int{3,3,2,3,3,3,2,3,3,2,3,3,3,2},0,0},
-			test_t{ok:true,f:New(19,7,5)},
+			test_t{ok:true,f:Creer(19,7,5)},
 		},
 		{ // jours (ecarts ou codes successifs entre j+1 et j)
 			data_t{[]int{1,1,1,1,1,1,1,1},1,0},
-			test_t{ok:true,f:New(1,1,-1)},
+			test_t{ok:true,f:Creer(1,1,-1)},
 		},
 		{ // mois (duree des mois de mars a fevrier sur une annee glissante) 
 		  // remarque : le mois de fevrier n'a pas d'effet sur le resultat
 			data_t{[]int{31,30,31,30,31,31,30,31,30,31,31,28},3,0},
-			test_t{ok:true,f:New(153,5,-457)},
+			test_t{ok:true,f:Creer(153,5,-457)},
 		},
 		{ // calendrier julien (annees)
 		  // (durees des annees sur 2 periodes de 4 ans) 
@@ -80,7 +88,7 @@ func Test_codes(t *testing.T) {
 		  // du 1 janvier 0 au 1 mars 0 = 31+29=60
 		  // 1721058 + 60 = 1721118 (la valeur y0)
 			data_t{[]int{365,365,365,366,365,365,365,366},0,1721118},
-			test_t{ok:true,f:New(1461,4,6884472)},
+			test_t{ok:true,f:Creer(1461,4,6884472)},
 		},
 		{ // calendrier gregorien (siecles)
 		  // (durees des siecles sur deux periodes de 400 ans)
@@ -93,7 +101,7 @@ func Test_codes(t *testing.T) {
 		  //            au calendrier gregorien une annee bissextile tous
 		  //            les 4000 ans (les annees divisibles par 4000 ne seraient
 		  //            plus bissextiles) mais a ce jour cela n'a pas ete retenu
-		  //            et heureusement car cela prepare le "bug" de l'an 4000...
+		  //            et heureusement car cela preparerait le "bug" de l'an 4000...
 		  // jd julien(4 octobre 1582) = 2299160
 		  // du 4 octobre 1582 au 15 octobre 1582 = 1
 		  // du 15 octobre au 31 decembre = 78
@@ -106,18 +114,18 @@ func Test_codes(t *testing.T) {
 		  // jd gregorien (1 mars 1600) = 2305508 (valeur y0)
 		  // [(a*s + r) / b] = jj = [(a*16 + r) / b] = 2305508
 			data_t{[]int{36524,36524,36524,36525,36524,36524,36524,36525},16,2305508},
-			test_t{ok:true,f:New(146097,4,6884480)},
+			test_t{ok:true,f:Creer(146097,4,6884480)},
 		},
 	}
 	
-	var actual = new(test_t)
+	var obtenu = new(test_t)
 	for _, tt := range tests_codes {
-		actual.ok, actual.f = Codes(tt.data.c, tt.data.x0, tt.data.y0)
-		if !(tt.expected.ok == actual.ok) {
-			t.Errorf("codes(%v): expected ok %t, actual %t",tt.data, tt.expected.ok, actual.ok)
+		obtenu.ok, obtenu.f = Codes(tt.data.c, tt.data.x0, tt.data.y0)
+		if !(tt.attendu.ok == obtenu.ok) {
+			t.Errorf(test+"(%v): attendu ok %t, obtenu %t",tt.data, tt.attendu.ok, obtenu.ok)
 		}
-		if tt.expected.ok && !actual.f.Equal(tt.expected.f) {
-			t.Errorf("codes(%v): expected fqa %v, actual %v",tt.data, tt.expected.f, actual.f)
+		if tt.attendu.ok && !obtenu.f.Egal(tt.attendu.f) {
+			t.Errorf(test+"(%v): attendu fqa %v, obtenu %v",tt.data, tt.attendu.f, obtenu.f)
 		}
 	}	
 }
