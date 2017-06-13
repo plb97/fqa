@@ -10,9 +10,9 @@ la partie entière.
 
 Entre autre, les formes quasi affines sont utiles dans les calculs de 
 calendriers. Dans son livre 
-*La saga des calendriers ou la frisson millénariste* 
+*La saga des calendriers ou le frisson millénariste* 
 (Bibliotèque pour la Science, 1998), 
-Jean Lefort en donne une illustration remarquable.
+Jean Lefort en donne une illustration intéressante.
 Cette utilisation des droites discrètes a été proposée en 1992 par A. Troesch :
 
 [Droites discretes et calendriers (Albert Troesch)](https://mathinfo.unistra.fr/fileadmin/upload/IREM/Publications/L_Ouvert/n071/o_71_27-42.pdf)
